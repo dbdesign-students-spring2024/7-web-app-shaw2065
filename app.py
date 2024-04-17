@@ -9,9 +9,6 @@ from flask import Flask, render_template, request, redirect, url_for, make_respo
 
 # import logging
 import sentry_sdk
-from sentry_sdk.integrations.flask import (
-    FlaskIntegration,
-)  # delete this if not using sentry.io
 
 # from markupsafe import escape
 import pymongo
