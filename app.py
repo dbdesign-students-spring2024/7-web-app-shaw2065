@@ -7,9 +7,6 @@ import datetime
 
 from flask import Flask, render_template, request, redirect, url_for, make_response
 
-# import logging
-import sentry_sdk
-
 # from markupsafe import escape
 import pymongo
 from pymongo.errors import ConnectionFailure
