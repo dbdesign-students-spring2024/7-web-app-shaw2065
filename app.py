@@ -7,6 +7,9 @@ import datetime
 
 from flask import Flask, render_template, request, redirect, url_for, make_response
 
+# import logging
+import sentry_sdk
+
 # from markupsafe import escape
 import pymongo
 from pymongo.errors import ConnectionFailure
@@ -35,7 +38,6 @@ except ConnectionFailure as e:
     # catch any database errors
     # the ping command failed, so the connection is not available.
     print(" * MongoDB connection error:", e)  # debug
-    sentry_sdk.capture_exception(e)  # send the error to sentry.io. delete if not using
     sys.exit(1)  # this is a catastrophic error, so no reason to continue to live
 
 
