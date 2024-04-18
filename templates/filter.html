@@ -8,7 +8,7 @@
 </style>
 <h2>Filter</h2>
 <p>Filter your collection by type, status, and storage location.</p>
-<form action="/filter" method="GET">
+<form action="{{ url_for('filter') }}" method="GET">
     <label for="type">Type:</label>
     <select name="media_type" id="media_type">
         <option value="">All</option>
