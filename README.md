@@ -11,6 +11,9 @@ To better organize the collection or retrieve results based on specific needs, u
 ### Random
 **Random** is a unique function designed specifically for people who have trouble deciding what to do in their free time. Despite losing some accuracy in recommendations due to the absence of filters, the complete randomization of results aims to provide users with the most unexpected suggestions from their current collection.
 
+> [!NOTE]  
+> In order to successfully implement **Filter** functoin on webserver, the form action is set to `"/~xh2065/7-web-app-shaw2065/flask.cgi/filter"`, in contrast to the `"/filter"` in the filter.html for local server. This is the only difference between the files in this repository and the edited one on the i6 server.
+
 ## A link to the deployed copy
 [Link to TinyLibrary](https://i6.cims.nyu.edu/~xh2065/7-web-app-shaw2065/flask.cgi/)
 
