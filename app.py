@@ -157,7 +157,6 @@ def edit_entry(mongoid):
         "storage": storage,
         "status": status,
         "notes": notes,
-        "created_at": datetime.datetime.utcnow(),
     }
 
     db.tinylibrary.update_one(
