@@ -13,11 +13,11 @@ import flask_login
 import pymongo
 from pymongo.errors import ConnectionFailure
 from bson.objectid import ObjectId
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 
 # load credentials and configuration options from .env file
 # if you do not yet have a file named .env, make one based on the template in env.example
-load_dotenv(override=True)  # take environment variables from .env.
+# load_dotenv(override=True)  # take environment variables from .env.
 
 # instantiate the app using sentry for debugging
 app = Flask(__name__)

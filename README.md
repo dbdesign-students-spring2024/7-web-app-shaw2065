@@ -12,7 +12,7 @@ To better organize the collection or retrieve results based on specific needs, u
 **Random** is a unique function designed specifically for people who have trouble deciding what to do in their free time. Despite losing some accuracy in recommendations due to the absence of filters, the complete randomization of results aims to provide users with the most unexpected suggestions from their current collection.
 
 ## A link to the deployed copy
-[Link to TinyLibrary](https://data.insideairbnb.com/greece/attica/athens/2023-12-25/data/listings.csv.gz)
+[Link to TinyLibrary](https://i6.cims.nyu.edu/~xh2065/7-web-app-shaw2065/flask.cgi/)
 
 ## Credits
 This is a solo project.
