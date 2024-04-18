@@ -154,6 +154,7 @@ def edit_entry(mongoid):
         "storage": storage,
         "status": status,
         "notes": notes,
+        "created_at": datetime.datetime.utcnow(),
     }
 
     db.tinylibrary.update_one(
@@ -167,8 +168,7 @@ def edit_entry(mongoid):
 def delete(mongoid):
     db.tinylibrary.delete_one({"_id": ObjectId(mongoid)})
 
-    return redirect(url_for("browse"))
-
+    return redirect(request.referrer)
 
 @app.route("/webhook", methods=["POST"])
 def webhook():

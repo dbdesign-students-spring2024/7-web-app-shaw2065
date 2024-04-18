@@ -29,7 +29,6 @@
                 </td>
                 <td>{{ random_document[0].notes }}</td>
                 <td>{{ random_document[0].created_at.strftime("%d %B %Y")}}</td>
-                <td><a href="{{ url_for('edit',mongoid=random_document._id)}}">Edit</a> | <a href="{{ url_for('delete',mongoid=random_document._id)}}">Delete</a></td>
             </tr>
         </tbody>
     </table>
