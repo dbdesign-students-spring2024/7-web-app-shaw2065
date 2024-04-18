@@ -1,7 +1,9 @@
 # Flask-MongoDB Web App
 
 ## Title
-TinyLibrary
+<span style="color:#f07167">
+Text content
+</span>
 
 ## Description
 TinyLibrary is a home library cataloging application designed to help users organize personal collections of various media products, ranging from books to video games. Users need to log into their account to use the application. After logging into TinyLibrary, they have four functions to choose from: **Create**, **Browse**, **Filter**, and **Random**.
