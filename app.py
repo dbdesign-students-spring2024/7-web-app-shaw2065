@@ -9,9 +9,6 @@ import random as random_module
 from flask import Flask, render_template,render_template_string, request, redirect, url_for, make_response
 import flask_login
 
-# import logging
-import sentry_sdk
-
 # from markupsafe import escape
 import pymongo
 from pymongo.errors import ConnectionFailure

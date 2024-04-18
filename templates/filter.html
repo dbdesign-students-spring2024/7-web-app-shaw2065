@@ -1,4 +1,11 @@
 {% extends 'base.html' %} {% block container %}
+<style>
+    form {
+        margin: auto;
+        width: 50%;
+        text-align: center;
+    }
+</style>
 <h2>Filter</h2>
 <p>Filter your collection by type, status, and storage location.</p>
 <form action="/filter" method="GET">
