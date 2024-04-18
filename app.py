@@ -4,8 +4,10 @@ import os
 import sys
 import subprocess
 import datetime
+import random as random_module
 
-from flask import Flask, render_template, request, redirect, url_for, make_response
+from flask import Flask, render_template,render_template_string, request, redirect, url_for, make_response
+import flask_login
 
 # import logging
 import sentry_sdk
@@ -22,6 +24,22 @@ load_dotenv(override=True)  # take environment variables from .env.
 
 # instantiate the app using sentry for debugging
 app = Flask(__name__)
+app.secret_key = 'superb'
+
+login_manager = flask_login.LoginManager()
+
+login_manager.init_app(app)
+
+class User(flask_login.UserMixin):
+    def __init__(self, name, password):
+        self.id = name
+        self.password = password
+
+users = {"amigo": User("amigo", "adios")}
+
+@login_manager.user_loader
+def user_loader(id):
+    return users.get(id)
 
 # # turn on debugging if in development mode
 # app.debug = True if os.getenv("FLASK_ENV", "development") == "development" else False
@@ -42,112 +60,118 @@ except ConnectionFailure as e:
 
 
 # set up the routes
-
-
 @app.route("/")
 def home():
-    """
-    Route for the home page.
-    Simply returns to the browser the content of the index.html file located in the templates folder.
-    """
     return render_template("index.html")
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'GET':
+        return render_template("login.html")
 
-@app.route("/read")
-def read():
-    """
-    Route for GET requests to the read page.
-    Displays some information for the user with links to other pages.
-    """
-    docs = db.exampleapp.find({}).sort(
-        "created_at", -1
-    )  # sort in descending order of created_at timestamp
-    return render_template("read.html", docs=docs)  # render the read template
+    user = users.get(request.form["name"])
 
+    if user is None or user.password != request.form["password"]:
+        return redirect(url_for("login"))
+
+    flask_login.login_user(user)
+    return redirect(url_for("homepage"))
+
+@app.route("/homepage")
+@flask_login.login_required
+def homepage():
+    return render_template("home.html",logged= "Logged in as: "+flask_login.current_user.id)
+
+@app.route("/browse")
+def browse():
+    docs = db.tinylibrary.find({}).sort("created_at", -1)
+    
+    return render_template("browse.html", docs=docs)
+
+@app.route("/random")
+def random():
+    total_documents = db.tinylibrary.count_documents({})
+
+    random_index = random_module.randint(0, total_documents - 1)
+    random_document = db.tinylibrary.find().skip(random_index).limit(1)
+
+    return render_template('random.html', random_document=random_document)
+
+@app.route('/filter', methods=['GET'])
+def filter():
+    type_filter = request.args.get('media_type')
+    status_filter = request.args.get('status')
+    storage_filter = request.args.get('storage')
+
+    storage_options = db.tinylibrary.distinct('storage')
+
+    query = {}
+    if type_filter:
+        query['media_type'] = type_filter
+    if status_filter:
+        query['status'] = status_filter
+    if storage_filter:
+        query['storage'] = storage_filter
+
+    filtered_docs = db.tinylibrary.find(query).sort("created_at", -1)
+
+    return render_template('filter.html', docs=filtered_docs, storage_options=storage_options)
 
 @app.route("/create")
 def create():
-    """
-    Route for GET requests to the create page.
-    Displays a form users can fill out to create a new document.
-    """
     return render_template("create.html")  # render the create template
 
 
 @app.route("/create", methods=["POST"])
-def create_post():
-    """
-    Route for POST requests to the create page.
-    Accepts the form submission data for a new document and saves the document to the database.
-    """
-    name = request.form["fname"]
-    message = request.form["fmessage"]
+def create_entry():
+    media_type = request.form["media_type"]
+    title = request.form["title"]
+    storage = request.form["storage"]
+    status = request.form["status"]
+    notes = request.form["note"]
 
-    # create a new document with the data the user entered
-    doc = {"name": name, "message": message, "created_at": datetime.datetime.utcnow()}
-    db.exampleapp.insert_one(doc)  # insert a new document
+    doc = {"media_type": media_type,"title": title,"storage": storage,"status": status, "notes": notes, "created_at": datetime.datetime.utcnow()}
+    db.tinylibrary.insert_one(doc)  # insert a new document
 
-    return redirect(
-        url_for("read")
-    )  # tell the browser to make a request for the /read route
+    return redirect(url_for("browse"))
 
 
 @app.route("/edit/<mongoid>")
 def edit(mongoid):
-    """
-    Route for GET requests to the edit page.
-    Displays a form users can fill out to edit an existing record.
-
-    Parameters:
-    mongoid (str): The MongoDB ObjectId of the record to be edited.
-    """
-    doc = db.exampleapp.find_one({"_id": ObjectId(mongoid)})
-    return render_template(
-        "edit.html", mongoid=mongoid, doc=doc
-    )  # render the edit template
+    doc = db.tinylibrary.find_one({"_id": ObjectId(mongoid)})
+    return render_template("edit.html", mongoid=mongoid, doc=doc)
 
 
 @app.route("/edit/<mongoid>", methods=["POST"])
-def edit_post(mongoid):
-    """
-    Route for POST requests to the edit page.
-    Accepts the form submission data for the specified document and updates the document in the database.
-
-    Parameters:
-    mongoid (str): The MongoDB ObjectId of the record to be edited.
-    """
-    name = request.form["fname"]
-    message = request.form["fmessage"]
+def edit_entry(mongoid):
+    media_type = request.form["media_type"]
+    title = request.form["title"]
+    storage = request.form["storage"]
+    status = request.form["status"]
+    notes = request.form["note"]
 
     doc = {
         # "_id": ObjectId(mongoid),
-        "name": name,
-        "message": message,
+        "media_type": media_type,
+        "title": title,
+        "storage": storage,
+        "status": status,
+        "notes": notes,
         "created_at": datetime.datetime.utcnow(),
     }
 
-    db.exampleapp.update_one(
-        {"_id": ObjectId(mongoid)}, {"$set": doc}  # match criteria
+    db.tinylibrary.update_one(
+        {"_id": ObjectId(mongoid)}, {"$set": doc}
     )
 
-    return redirect(
-        url_for("read")
-    )  # tell the browser to make a request for the /read route
+    return redirect(url_for("browse"))
 
 
 @app.route("/delete/<mongoid>")
 def delete(mongoid):
-    """
-    Route for GET requests to the delete page.
-    Deletes the specified record from the database, and then redirects the browser to the read page.
+    db.tinylibrary.delete_one({"_id": ObjectId(mongoid)})
 
-    Parameters:
-    mongoid (str): The MongoDB ObjectId of the record to be deleted.
-    """
-    db.exampleapp.delete_one({"_id": ObjectId(mongoid)})
-    return redirect(
-        url_for("read")
-    )  # tell the web browser to make a request for the /read route.
+    return redirect(url_for("browse"))
 
 
 @app.route("/webhook", methods=["POST"])

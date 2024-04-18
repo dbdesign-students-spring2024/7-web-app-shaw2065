@@ -1,18 +1,43 @@
 {% extends 'base.html' %} {% block container %}
 <h2>Update</h2>
 <p>Edit a record in the MongoDB database collection.</p>
-<form method="POST" action="{{ url_for('edit_post', mongoid=mongoid) }}">
-  <p>
-    Your name:
-    <input type="text" id="fname" name="fname" value="{{doc.name}}" /><br />
-  </p>
-  <p>
-    Message:
-    <textarea id="fmessage" name="fmessage">{{doc.message}}</textarea>
-  </p>
-  <p>
-    <a href="{{ url_for('read')}}">Cancel</a>
-    <input type="submit" name="post-btn" value="Save" />
-  </p>
+<form method="POST" action="{{ url_for('edit_entry', mongoid=mongoid) }}">
+    <p>
+        <label for="types">Type:</label>
+        <select id="media_type" name="media_type">
+            <option value="book" {% if doc.media_type=="book" %} selected {% endif %}>Book</option>
+            <option value="movie" {% if doc.media_type=="movie" %} selected {% endif %}>Movie</option>
+            <option value="music_album" {% if doc.media_type=="music_album" %} selected {% endif %}>Music Album</option>
+            <option value="tv_show" {% if doc.media_type=="tv_show" %} selected {% endif %}>TV Show</option>
+            <option value="video_game" {% if doc.media_type=="video_game" %} selected {% endif %}>Video Game</option>
+        </select>
+    </p>
+    <p>
+        Title:
+        <input type="text" id="title" name="title" value="{{doc.title}}" />
+        <br />
+    </p>
+    <p>
+        Storage Location:
+        <input type="text" id="storage" name="storage" value="{{doc.storage}}" />
+        <br />
+    </p>
+    <p>
+        <label for="status">Status:</label>
+        <select id="status" name="status">
+            <option value="not_started" {% if doc.status=="not_started" %} selected {% endif %}>Not Started</option>
+            <option value="in_progress" {% if doc.status=="in_progress" %} selected {% endif %}>In Progress</option>
+            <option value="finished" {% if doc.status=="finished" %} selected {% endif %}>Finished</option>
+        </select>
+    </p>
+    <p>
+        Note:
+        <br>
+        <textarea type="text" id="note" name="note" rows="3" cols="35" maxlength="30">{{ doc.notes }}</textarea>
+    </p>
+    <p>
+        <a href="{{ url_for('browse')}}">Cancel</a>
+        <input type="submit" name="post-btn" value="Save" />
+    </p>
 </form>
 {% endblock %}

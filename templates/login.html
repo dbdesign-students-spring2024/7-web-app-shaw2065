@@ -1,0 +1,13 @@
+{% extends 'pre.html' %} {% block container %}
+<h2>Login</h2>
+<p class="h1">
+    username: <u>amigo</u>
+    <br> password: <u>adios</u>
+    <br>
+</p>
+<form action='login' method='POST'>
+    <input type='text' name='name' id='name' placeholder='username' />
+    <input type='password' name='password' id='password' placeholder='password' />
+    <input type='submit' name='submit' />
+</form>
+{% endblock %}

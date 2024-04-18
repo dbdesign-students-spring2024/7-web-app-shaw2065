@@ -1,25 +1,64 @@
-.container {
-  border: 2px solid;
-  width: 50%;
-  margin: 0 auto;
+
+body {
+  background-color: #fdfcdc;
 }
 
-header,
-footer,
-main {
+header {
+  color: #f07167;
+  font-family:Georgia, 'Times New Roman', Times, serif;
+  border-bottom: 2px solid;
+  margin-bottom: 5px;
+  font-size: 20px;
   padding: 20px;
 }
 
-header,
+h1 {
+  letter-spacing: 1px;
+}
+
 main {
-  border-bottom: 2px solid;
+  color: #0081a7;
+  font-family:Georgia, 'Times New Roman', Times, serif;
   margin-bottom: 5px;
+  margin-left: 20px;
+  font-size: 18px;
 }
 
-p.post {
-  font-size: 12px;
+a:link {
+  color: #00afb9;
+}
+a:visited {
+  color: #00afb9;
 }
 
-footer {
-  margin-bottom: 5px;
+p.h1 {
+  font-size: 18px;
+  line-height: 1.5;
+  margin-left: 25px;
+}
+
+form {
+  margin-left: 25px;
+}
+
+th, td {
+  border-bottom: 1px solid #fed9b7;
+  text-align: left;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th {
+  height: 40px
+}
+
+td {
+  height: 30px
+}
+
+ul {
+  line-height: 30px
 }

@@ -1,0 +1,60 @@
+{% extends 'base.html' %} {% block container %}
+<h2>Filter</h2>
+<p>Filter your collection by type, storage location, and status.</p>
+<form action="/filter" method="GET">
+    <label for="type">Type:</label>
+    <select name="media_type" id="media_type">
+        <option value="">All</option>
+        <option value="book">Book</option>
+        <option value="movie">Movie</option>
+        <option value="music_album">Music Album</option>
+        <option value="tv_show">TV Show</option>
+        <option value="video_game">Video Game</option>
+    </select>
+    <label for="status">Status:</label>
+    <select name="status" id="status">
+        <option value="">All</option>
+        <option value="not_started">Not Started</option>
+        <option value="in_progress">In Progress</option>
+        <option value="finished">Finished</option>
+    </select>
+    <label for="storage">Storage:</label>
+    <select name="storage" id="storage">
+        <option value="">All</option>
+        {% for storage_option in storage_options %}
+        <option value="{{ storage_option }}">{{ storage_option }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit">Filter</button>
+</form>
+<table style="width:100%">
+    <thead>
+        <tr>
+            <th>Type</th>
+            <th>Title</th>
+            <th>Storage</th>
+            <th>Status</th>
+            <th>Notes</th>
+            <th>Date of Creation</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for doc in docs %}
+        <tr>
+            <td>
+                {% if doc.media_type == "book" %} Book {% elif doc.media_type == "movie" %} Movie {% elif doc.media_type == "music_album" %} Music Album {% elif doc.media_type == "tv_show" %} TV Show {% elif doc.media_type == "video_game" %} Video Game {% endif %}
+            </td>
+            <td>{{ doc.title }}</td>
+            <td>{{ doc.storage }}</td>
+            <td>
+                {% if doc.status == "not_started" %} Not Started {% elif doc.status == "in_progress" %} In Progress {% elif doc.status == "finished" %} Finished {% endif %}
+            </td>
+            <td>{{ doc.notes }}</td>
+            <td>{{ doc.created_at.strftime("%d %B %Y")}}</td>
+            <td><a href="{{ url_for('edit',mongoid=doc._id)}}">Edit</a> | <a href="{{ url_for('delete',mongoid=doc._id)}}">Delete</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,15 +1,43 @@
 {% extends 'base.html' %} {% block container %}
 <h2>Create</h2>
-<p>Create a new record in the MongoDB database collection.</p>
-<form method="POST" action="{{ url_for('create_post') }}">
-  <p>Your name: <input type="text" id="fname" name="fname" /><br /></p>
-  <p>
-    Message:
-    <textarea type="text" id="fmessage" name="fmessage"></textarea>
-  </p>
-  <p>
-    <a href="{{ url_for('read')}}">Cancel</a>
-    <input type="submit" name="post-btn" value="Post" />
-  </p>
+<p>Create a new entry into your collection.</p>
+<form method="POST" action="{{ url_for('create_entry') }}">
+    <p>
+        <label for="types">Type:</label>
+        <select id="media_type" name="media_type">
+            <option value="book">Book</option>
+            <option value="movie">Movie</option>
+            <option value="music_album">Music Album</option>
+            <option value="tv_show">TV Series</option>
+            <option value="video_game">Video Game</option>
+        </select>
+    </p>
+    <p>
+        Title:
+        <input type="text" id="title" name="title" />
+        <br />
+    </p>
+    <p>
+        Storage Location:
+        <input type="text" id="storage" name="storage" />
+        <br />
+    </p>
+    <p>
+        <label for="status">Status:</label>
+        <select id="status" name="status">
+            <option value="not_started">Not Started</option>
+            <option value="in_progress">In Progress</option>
+            <option value="finished">Finished</option>
+        </select>
+    </p>
+    <p>
+        Note:
+        <br>
+        <textarea type="text" id="note" name="note" rows="3" cols="35" maxlength="30">Enter text here...</textarea>
+    </p>
+    <p>
+        <a href="{{ url_for('browse')}}">Cancel</a>
+        <input type="submit" name="post-btn" value="Post" />
+    </p>
 </form>
 {% endblock %}

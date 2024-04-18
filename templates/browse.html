@@ -1,0 +1,37 @@
+{% extends 'base.html' %} {% block container %}
+<h2>Browse</h2>
+<p>Browse your current collection.
+    <table style="width:100%">
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Title</th>
+                <th>Storage</th>
+                <th>Status</th>
+                <th>Notes</th>
+                <th>Date of Creation</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for doc in docs %}
+            <tr>
+                <td>
+                    {% if doc.media_type == "book" %} Book {% elif doc.media_type == "movie" %} Movie {% elif doc.media_type == "music_album" %} Music Album {% elif doc.media_type == "tv_show" %} TV Show {% elif doc.media_type == "video_game" %} Video Game {% endif %}
+                </td>
+                <td>{{ doc.title }}</td>
+                <td>{{ doc.storage }}</td>
+                <td>
+                    {% if doc.status == "not_started" %} Not Started {% elif doc.status == "in_progress" %} In Progress {% elif doc.status == "finished" %} Finished {% endif %}
+                </td>
+                <td>{{ doc.notes }}</td>
+                <td>{{ doc.created_at.strftime("%d %B %Y")}}</td>
+                <td><a href="{{ url_for('edit',mongoid=doc._id)}}">Edit</a> | <a href="{{ url_for('delete',mongoid=doc._id)}}">Delete</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    </div>
+</p>
+{% endblock %}

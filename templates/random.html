@@ -1,0 +1,38 @@
+{% extends 'base.html' %} {% block container %}
+<h2>Random</h2>
+<p>Present to you a random item from your collection.
+    <p>
+        <a href="{{ url_for('random')}}">Another random entry</a>
+    </p>
+    <table style="width:100%">
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Title</th>
+                <th>Storage</th>
+                <th>Status</th>
+                <th>Notes</th>
+                <th>Date of Creation</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    {% if random_document[0].media_type == "book" %} Book {% elif random_document[0].media_type == "movie" %} Movie {% elif random_document[0].media_type == "music_album" %} Music Album {% elif random_document[0].media_type == "tv_show" %} TV Show {% elif random_document[0].media_type
+                    == "video_game" %} Video Game {% endif %}
+                </td>
+                <td>{{ random_document[0].title }}</td>
+                <td>{{ random_document[0].storage }}</td>
+                <td>
+                    {% if random_document[0].status == "not_started" %} Not Started {% elif random_document[0].status == "in_progress" %} In Progress {% elif random_document[0].status == "finished" %} Finished {% endif %}
+                </td>
+                <td>{{ random_document[0].notes }}</td>
+                <td>{{ random_document[0].created_at.strftime("%d %B %Y")}}</td>
+                <td><a href="{{ url_for('edit',mongoid=random_document._id)}}">Edit</a> | <a href="{{ url_for('delete',mongoid=random_document._id)}}">Delete</a></td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+</p>
+{% endblock %}
